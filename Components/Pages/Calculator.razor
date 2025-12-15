@@ -1,0 +1,255 @@
+﻿@page "/calculator"
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+
+                <!-- Header -->
+                <div class="card-header text-white">
+                    <h2 class="mb-0">Simple Calculator</h2>
+                </div>
+
+                <div class="card-body">
+
+                    <!-- Input Fields -->
+                    <div class="mb-4">
+                        <div class="form-group mb-3">
+                            <label class="form-label fw-bold">First Number</label>
+                            <input type="number"
+                                   class="form-control form-control-lg"
+                                   @bind="firstNumber"
+                                   @bind:event="oninput"
+                                   placeholder="Enter first number" />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="form-label fw-bold">Second Number</label>
+                            <input type="number"
+                                   class="form-control form-control-lg"
+                                   @bind="secondNumber"
+                                   @bind:event="oninput"
+                                   placeholder="Enter second number" />
+                        </div>
+                    </div>
+
+                    <!-- Operation Buttons -->
+                    <div class="mb-4">
+                        <h5 class="mb-3">Select Operation</h5>
+
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <button class="btn btn-success w-100 py-3" @onclick="Add">
+                                    ➕ Add
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-danger w-100 py-3" @onclick="Subtract">
+                                    ➖ Subtract
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <button class="btn btn-warning w-100 py-3" @onclick="Multiply">
+                                    ✖ Multiply
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-info w-100 py-3 text-white" @onclick="Divide">
+                                    ➗ Divide
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Result Display -->
+                    <div class="mt-4 p-3 bg-light rounded">
+                        <h4 class="mb-2">Calculation Result</h4>
+
+                        <div class="display-result border">
+                            <span class="fw-bold text-primary">
+                                @if (double.IsNaN(result))
+                                {
+                                    <span class="text-danger">Cannot divide by zero!</span>
+                                }
+                                else
+                                {
+                                    @result.ToString("F2")
+                                }
+                            </span>
+                        </div>
+
+                        <div class="mt-2 text-muted">
+                            <small>@GetOperationText()</small>
+                        </div>
+                    </div>
+
+                    <!-- Clear Button -->
+                    <div class="mt-4 text-center">
+                        <button class="btn btn-outline-secondary" @onclick="ClearAll">
+                            🔄 Clear All
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="card-footer text-muted">
+                    <small>Two-way data binding & event handling example</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Card styling */
+    .card {
+        border-radius: 20px;
+        overflow: hidden;
+        background: linear-gradient(145deg, #ffffff, #f1f5f9);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Header */
+    .card-header {
+        background: linear-gradient(135deg, #2563eb, #1e40af);
+        text-align: center;
+        padding: 1.2rem;
+    }
+
+        .card-header h2 {
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+    /* Inputs */
+    .form-control-lg {
+        font-size: 1.1rem;
+        padding: 0.8rem 1rem;
+        border-radius: 12px;
+        border: 1px solid #cbd5e1;
+        transition: all 0.25s ease;
+    }
+
+        .form-control-lg:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+        }
+
+    /* Buttons */
+    button {
+        border-radius: 14px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        transition: all 0.25s ease;
+    }
+
+        button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+    /* Result section */
+    .display-result {
+        min-height: 90px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(145deg, #ffffff, #e5e7eb);
+        border-radius: 14px;
+    }
+
+        .display-result span {
+            font-size: 2.2rem;
+        }
+
+    /* Result container */
+    .bg-light {
+        background: linear-gradient(135deg, #f8fafc, #e2e8f0) !important;
+    }
+
+    /* Footer */
+    .card-footer {
+        background-color: #f8fafc;
+        text-align: center;
+        font-style: italic;
+    }
+
+    /* Clear button */
+    .btn-outline-secondary {
+        border-radius: 20px;
+        padding: 0.5rem 1.5rem;
+    }
+
+    /* Smooth transitions everywhere */
+    * {
+        transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+</style>
+
+@code {
+    private double firstNumber;
+    private double secondNumber;
+    private double result;
+    private string lastOperation = "";
+
+    private void Add()
+    {
+        result = firstNumber + secondNumber;
+        lastOperation = "add";
+    }
+
+    private void Subtract()
+    {
+        result = firstNumber - secondNumber;
+        lastOperation = "subtract";
+    }
+
+    private void Multiply()
+    {
+        result = firstNumber * secondNumber;
+        lastOperation = "multiply";
+    }
+
+    private void Divide()
+    {
+        if (secondNumber != 0)
+        {
+            result = firstNumber / secondNumber;
+            lastOperation = "divide";
+        }
+        else
+        {
+            result = double.NaN;
+            lastOperation = "divide_error";
+        }
+    }
+
+    private void ClearAll()
+    {
+        firstNumber = 0;
+        secondNumber = 0;
+        result = 0;
+        lastOperation = "";
+    }
+
+    private string GetOperationText()
+    {
+        return lastOperation switch
+        {
+            "add" => $"{firstNumber} + {secondNumber} = {result:F2}",
+            "subtract" => $"{firstNumber} - {secondNumber} = {result:F2}",
+            "multiply" => $"{firstNumber} × {secondNumber} = {result:F2}",
+            "divide" => $"{firstNumber} ÷ {secondNumber} = {result:F2}",
+            "divide_error" => "Division by zero is not allowed!",
+            _ => "Enter numbers and select an operation"
+        };
+    }
+}

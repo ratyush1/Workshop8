@@ -1,0 +1,35 @@
+﻿@page "/products"
+@using Workshop8.Components.Layout
+@layout ProductLayout
+
+<h2 class="mb-4">Our Products</h2>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var product in products)
+    {
+        <div class="col d-flex justify-content-center">
+            <ProductCard ProductName="@product.Item1"
+                         Price="@product.Item2"
+                         ImageUrl="@product.Item3"
+                         LikesCount="@product.Item4"
+                         OnLike="HandleLike" />
+        </div>
+    }
+</div>
+
+@code {
+    // Tuple-based product list with LOCAL images
+    private List<(string, decimal, string, int)> products = new()
+    {
+        ("Laptop Pro X1", 1299.99M, "images/laptop.jpg", 42),
+        ("Smartphone Ultra", 899.99M, "images/phone.jpg", 87),
+        ("Wireless Headphones", 249.99M, "images/headphones.jpg", 56),
+        ("Gaming Monitor", 549.99M, "images/monitor.jpg", 23),
+        ("Watch", 329.99M, "images/watch.jpg", 78)
+    };
+
+    private void HandleLike(int newLikeCount)
+    {
+        Console.WriteLine($"New like count: {newLikeCount}");
+    }
+}

@@ -1,0 +1,42 @@
+﻿<div class="card food-card shadow-sm">
+    <img src="@ImageUrl"
+         class="card-img-top"
+         alt="@Name" />
+
+    <div class="card-body">
+        <h5 class="card-title">@Name</h5>
+
+        <p class="card-text text-muted">
+            <strong>Ingredients:</strong> @Ingredients
+        </p>
+
+        <p class="price">Rs. @Price</p>
+    </div>
+</div>
+<style>
+    .food-card {
+        border-radius: 15px;
+        border: 1px solid #e5e7eb;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        max-width: 280px;
+    }
+
+        .food-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+
+    .price {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #16a34a;
+    }
+</style>
+@code {
+    [Parameter] public string Name { get; set; } = string.Empty;
+    [Parameter] public string Ingredients { get; set; } = string.Empty;
+    [Parameter] public decimal Price { get; set; }
+
+    [Parameter]
+    public string ImageUrl { get; set; } = string.Empty;
+}
